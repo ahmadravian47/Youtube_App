@@ -30,7 +30,7 @@ export default function editorportal() {
     videoData.append('editor', user_id);
 
     console.log(videoData);
-    axios.post('http://localhost:3000/upload', videoData)
+    axios.post('https://youtube-app-steel.vercel.app/upload', videoData)
       .then(response => {
         console.log('Response:', response);
         alert('Video Uploaded');
@@ -55,7 +55,7 @@ export default function editorportal() {
   }
 
   function getProfile() {
-    fetch('http://localhost:3000/profile', {
+    fetch('https://youtube-app-steel.vercel.app/profile', {
       credentials: 'include'
     })
       .then(r => r.json())

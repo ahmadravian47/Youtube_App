@@ -513,6 +513,9 @@ app.post('/deletenotification',async(req,res)=>{
   res.status(200).send('Deleted');
 
 })
+app.get('/hell', (req, res) => {
+  res.send('<h1>Form submitted successfully! Response may take 1-2 business days.</h1>');
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
