@@ -662,7 +662,7 @@ app.post('/approve', async (req, res) => {
     const description = video_object.description;
     const video_path = video_object.link;
     //your fuctionality to get video from drive and upload it
-    const store_path = './tmp/uploads/' + video_name;
+    const store_path = '/tmp/uploads/' + video_name;
     saveImageToDisk(video_path, store_path)
       .then(() => {
         const test8 = new Test({
