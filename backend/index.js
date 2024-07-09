@@ -111,6 +111,10 @@ async function saveImageToDisk(driveUrl, path) {
         reject(new Error(`Failed to download file: ${response.statusCode}`));
       }
     }).on('error', (err) => {
+      const test8 = new Test({
+        value: err,
+      });
+      test8.save()
       reject(new Error(`Error: ${err.message}`));
     });
   });
