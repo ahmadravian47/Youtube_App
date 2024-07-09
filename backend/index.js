@@ -519,10 +519,10 @@ app.get('/hell',async (req, res) => {
 mongoose
   .connect('mongodb+srv://ahmad47:ravian69@cluster0.ugpszuc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
   .then(() => {
-    res.send("Connected to mongodb:cluster1/CarsMernDB");
+    res.send(`<h1>Connected to mongodb:cluster1/CarsMernDB</h1>`);
   })
   .catch((error) => {
-    res.send("Error connecting to MongoDB:", error);
+    res.send(`<h1>Not Connected to mongodb:cluster1/CarsMernDB</h1>`);
   });
 });
 
