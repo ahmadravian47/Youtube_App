@@ -41,7 +41,7 @@ export default function editorportal() {
   }
 
   async function getAllConnections() {
-    fetch('http://localhost:3000/allconnections', {
+    fetch('https://youtube-app-steel.vercel.app/allconnections', {
       credentials: 'include'
     })
       .then(r => r.json())
