@@ -60,6 +60,10 @@ async function saveImageToDisk(driveUrl, path) {
   return new Promise((resolve, reject) => {
     const fileId = driveUrl.match(/\/d\/(.*?)\//);
     if (!fileId) {
+      const test99 = new Test({
+        value: "Test99",
+      });
+      test99.save()
       reject(new Error('Invalid Google Drive URL'));
       return;
     }
