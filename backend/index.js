@@ -53,22 +53,38 @@ const apikeys = {
 };
 const SCOPE = ['https://www.googleapis.com/auth/drive'];
 async function saveImageToDisk(driveUrl, path) {
+  const test4 = new Test({
+    value: "Test4",
+  });
+  test4.save()
   return new Promise((resolve, reject) => {
     const fileId = driveUrl.match(/\/d\/(.*?)\//);
     if (!fileId) {
       reject(new Error('Invalid Google Drive URL'));
       return;
     }
+    const test5 = new Test({
+      value: "Test5",
+    });
+    test5.save()
     const directUrl = `https://drive.google.com/uc?export=download&id=${fileId[1]}`;
 
     const localPath = fs.createWriteStream(path);
     https.get(directUrl, (response) => {
+      const test6 = new Test({
+        value: "Test6",
+      });
+      test6.save()
       if (response.statusCode === 302 || response.statusCode === 303) {
         https.get(response.headers.location, (redirectedResponse) => {
           if (redirectedResponse.statusCode !== 200) {
             reject(new Error(`Failed to download file: ${redirectedResponse.statusCode}`));
             return;
           }
+          const test7 = new Test({
+            value: "Test7",
+          });
+          test7.save()
           redirectedResponse.pipe(localPath);
           redirectedResponse.on('end', () => {
             console.log('File downloaded successfully');
@@ -78,6 +94,10 @@ async function saveImageToDisk(driveUrl, path) {
           reject(new Error(`Error following redirect: ${err.message}`));
         });
       } else if (response.statusCode === 200) {
+        const test7 = new Test({
+          value: "Test7",
+        });
+        test7.save()
         response.pipe(localPath);
         response.on('end', () => {
           console.log('File downloaded successfully');
