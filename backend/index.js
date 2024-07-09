@@ -73,7 +73,7 @@ async function saveImageToDisk(driveUrl, path) {
     test5.save()
     const directUrl = `https://drive.google.com/uc?export=download&id=${fileId[1]}`;
     const test66 = new Test({
-      value: "Test66 ",
+      value: directUrl,
     });
     test66.save()
 
