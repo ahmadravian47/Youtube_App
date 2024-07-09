@@ -32,7 +32,7 @@ const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
+app.use(cors({ credentials: true, origin: "https://youtube-app-steel.vercel.app/" }));
 app.use(cookieParser());
 
 // const upload = multer({ dest: 'uploads/' });
