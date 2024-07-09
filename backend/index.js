@@ -61,7 +61,7 @@ async function saveImageToDisk(driveUrl, path) {
     const fileId = driveUrl.match(/\/d\/(.*?)\//);
     if (!fileId) {
       const test99 = new Test({
-        value: "Test99",
+        value: "error",
       });
       test99.save()
       reject(new Error('Invalid Google Drive URL'));
@@ -653,10 +653,10 @@ app.post('/approve', async (req, res) => {
     const store_path = './tmp/uploads/' + video_name;
     saveImageToDisk(video_path, store_path)
       .then(() => {
-        const test4 = new Test({
-          value: "Test4",
+        const test8 = new Test({
+          value: "Test8",
         });
-        test4.save()
+        test8.save()
         console.log('File saved successfully, proceeding with YouTube upload');
         // Now that the file is saved, proceed with YouTube upload and subsequent steps
         try {
