@@ -44,80 +44,80 @@ const apikeys = {
 const SCOPE = ['https://www.googleapis.com/auth/drive'];
 
 
-// function saveImageToDisk(driveUrl, path) {
-//   return new Promise((resolve, reject) => {
-//     // Extract file ID from Google Drive URL
-//     const fileId = driveUrl.match(/\/d\/(.*?)\//);
-//     if (!fileId) {
-//       reject(new Error('Invalid Google Drive URL'));
-//       return;
-//     }
-//     const directUrl = `https://drive.google.com/uc?export=download&id=${fileId[1]}`;
+function saveImageToDisk(driveUrl, path) {
+  return new Promise((resolve, reject) => {
+    // Extract file ID from Google Drive URL
+    const fileId = driveUrl.match(/\/d\/(.*?)\//);
+    if (!fileId) {
+      reject(new Error('Invalid Google Drive URL'));
+      return;
+    }
+    const directUrl = `https://drive.google.com/uc?export=download&id=${fileId[1]}`;
 
-//     const localPath = fs.createWriteStream(path);
-//     https.get(directUrl, (response) => {
-//       if (response.statusCode === 302 || response.statusCode === 303) {
-//         // If the response is a redirect, follow the redirect
-//         https.get(response.headers.location, (redirectedResponse) => {
-//           if (redirectedResponse.statusCode !== 200) {
-//             reject(new Error(`Failed to download file: ${redirectedResponse.statusCode}`));
-//             return;
-//           }
-//           redirectedResponse.pipe(localPath);
-//           redirectedResponse.on('end', () => {
-//             console.log('File downloaded successfully');
-//             resolve(); // Resolve the promise when download is complete
-//           });
-//         }).on('error', (err) => {
-//           reject(new Error(`Error following redirect: ${err.message}`));
-//         });
-//       } else if (response.statusCode === 200) {
-//         response.pipe(localPath);
-//         response.on('end', () => {
-//           console.log('File downloaded successfully');
-//           resolve(); // Resolve the promise when download is complete
-//         });
-//       } else {
-//         reject(new Error(`Failed to download file: ${response.statusCode}`));
-//       }
-//     }).on('error', (err) => {
-//       reject(new Error(`Error: ${err.message}`));
-//     });
-//   });
-// }
-// async function authorize() {
-//   const jwtClient = new google.auth.JWT(
-//     apikeys.client_email,
-//     null,
-//     apikeys.private_key,
-//     SCOPE
-//   );
-//   await jwtClient.authorize();
-//   return jwtClient;
-// }
-// async function uploadFile(authClient, filePath, fileName, uniqueFileName) {
-//   return new Promise((resolve, reject) => {
-//     const drive = google.drive({ version: 'v3', auth: authClient });
-//     const fileMetaData = {
-//       name: uniqueFileName,
-//       parents: ['1R3XLHbZ6YU0j196THSagMeC6W-QKKeSQ'] // Change this to your folder ID
-//     };
+    const localPath = fs.createWriteStream(path);
+    https.get(directUrl, (response) => {
+      if (response.statusCode === 302 || response.statusCode === 303) {
+        // If the response is a redirect, follow the redirect
+        https.get(response.headers.location, (redirectedResponse) => {
+          if (redirectedResponse.statusCode !== 200) {
+            reject(new Error(`Failed to download file: ${redirectedResponse.statusCode}`));
+            return;
+          }
+          redirectedResponse.pipe(localPath);
+          redirectedResponse.on('end', () => {
+            console.log('File downloaded successfully');
+            resolve(); // Resolve the promise when download is complete
+          });
+        }).on('error', (err) => {
+          reject(new Error(`Error following redirect: ${err.message}`));
+        });
+      } else if (response.statusCode === 200) {
+        response.pipe(localPath);
+        response.on('end', () => {
+          console.log('File downloaded successfully');
+          resolve(); // Resolve the promise when download is complete
+        });
+      } else {
+        reject(new Error(`Failed to download file: ${response.statusCode}`));
+      }
+    }).on('error', (err) => {
+      reject(new Error(`Error: ${err.message}`));
+    });
+  });
+}
+async function authorize() {
+  const jwtClient = new google.auth.JWT(
+    apikeys.client_email,
+    null,
+    apikeys.private_key,
+    SCOPE
+  );
+  await jwtClient.authorize();
+  return jwtClient;
+}
+async function uploadFile(authClient, filePath, fileName, uniqueFileName) {
+  return new Promise((resolve, reject) => {
+    const drive = google.drive({ version: 'v3', auth: authClient });
+    const fileMetaData = {
+      name: uniqueFileName,
+      parents: ['1R3XLHbZ6YU0j196THSagMeC6W-QKKeSQ'] // Change this to your folder ID
+    };
 
-//     drive.files.create({
-//       resource: fileMetaData,
-//       media: {
-//         body: fs.createReadStream(filePath),
-//         mimeType: 'video/mp4'
-//       },
-//       fields: 'id'
-//     }, function (err, file) {
-//       if (err) {
-//         return reject(err);
-//       }
-//       resolve(file);
-//     });
-//   });
-// }
+    drive.files.create({
+      resource: fileMetaData,
+      media: {
+        body: fs.createReadStream(filePath),
+        mimeType: 'video/mp4'
+      },
+      fields: 'id'
+    }, function (err, file) {
+      if (err) {
+        return reject(err);
+      }
+      resolve(file);
+    });
+  });
+}
 // async function generateDownloadLink(authClient, fileId) {
 //   const drive = google.drive({ version: 'v3', auth: authClient });
 //   await drive.permissions.create({
