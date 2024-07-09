@@ -28,6 +28,7 @@ export default function Youtuberportal() {
   async function approve_video(editor_email, video_name) {
     axios.post('http://localhost:3000/approve', { editor_email, video_name }, { withCredentials: true })
       .then(response => {
+        console.log('response',response);
         if (response.data.authUrl) {
           window.location.href = response.data.authUrl;
         } else if (response.status === 200) {

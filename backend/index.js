@@ -443,7 +443,7 @@ app.post('/approve', async (req, res) => {
     const description = video_object.description;
     const video_path = video_object.link;
     //your fuctionality to get video from drive and upload it
-    const store_path = './uploads/' + video_name;
+    const store_path = './tmp/uploads/' + video_name;
     saveImageToDisk(video_path, store_path)
       .then(() => {
         console.log('File saved successfully, proceeding with YouTube upload');
@@ -451,7 +451,7 @@ app.post('/approve', async (req, res) => {
         try {
           const predefinedFileName = video_name;
           const { title, description } = req.body;
-          const filePath = path.join(__dirname, 'uploads', predefinedFileName);
+          const filePath = path.join(__dirname, '/tmp/uploads', predefinedFileName);
 
           if (fs.existsSync(filePath)) {
             const fileId = uuid();
@@ -474,54 +474,9 @@ app.post('/approve', async (req, res) => {
         console.error('Error saving image:', err);
         res.status(500).send('Error saving image.');
       });
-    //   saveImageToDisk(video_path, store_path);
-    //   //line 2
-    //   //lin3
-    //   console.log('going further');
-
-    //   //---------now the video is uploaded in /uploads
-    //   const OAuth2 = google.auth.OAuth2;
-    //   const oauth2Client = new OAuth2(
-    //     process.env.CLIENT_ID,
-    //     process.env.CLIENT_SECRET,
-    //     process.env.REDIRECT_URIS
-    //   );
-
-    //   const youtube = google.youtube({
-    //     version: 'v3',
-    //     auth: oauth2Client
-    //   });
-
-    //   console.log('test1');
-    //  // In-memory storage for video metadata
-    //   const videoMetaStore = {};
-    //   try {
-    //     console.log('test2');
-    //     const predefinedFileName=video_name;
-    //     const { title, description } = req.body;
-    //     const filePath = path.join(__dirname, 'uploads', predefinedFileName);
-
-    //     if (fs.existsSync(filePath)) {
-    //       console.log('test3');
-    //       const fileId = uuid();
-    //       videoMetaStore[fileId] = { path: filePath, title, description };
-    //       const authUrl = oauth2Client.generateAuthUrl({
-    //         access_type: 'offline',
-    //         scope: 'https://www.googleapis.com/auth/youtube.upload',
-    //         state: JSON.stringify({ fileId })
-    //       });
-    //       res.json({ authUrl });
-    //     } else {
-    //       res.status(400).send('File does not exist.');
-    //     }
-    //   } catch (err) {
-    //     console.error('Error handling upload request:', err);
-    //     res.status(500).send('Error handling upload request.');
-    //   }
   })
 })
 app.get('/oauth2callback', async (req, res) => {
-  console.log('Test5');
   try {
     const { fileId } = JSON.parse(req.query.state);
     const videoData = videoMetaStore[fileId];
