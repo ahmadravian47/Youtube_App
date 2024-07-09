@@ -133,45 +133,45 @@ async function generateDownloadLink(authClient, fileId) {
   });
   return result.data;
 }
-app.post('/upload', upload.single('videoFile'), async (req, res) => {
-  try {
-    const uniqueFileName = `${Date.now()}-${uuid()}.mp4`;
-    const authClient = await authorize();
-    const file = await uploadFile(authClient, req.file.path, req.file.originalname, uniqueFileName);
-    const fileId = file.data.id;
-    const downloadLinks = await generateDownloadLink(authClient, fileId);
-    //------------write here--------------------------//
+// app.post('/upload', upload.single('videoFile'), async (req, res) => {
+//   try {
+//     const uniqueFileName = `${Date.now()}-${uuid()}.mp4`;
+//     const authClient = await authorize();
+//     const file = await uploadFile(authClient, req.file.path, req.file.originalname, uniqueFileName);
+//     const fileId = file.data.id;
+//     const downloadLinks = await generateDownloadLink(authClient, fileId);
+//     //------------write here--------------------------//
 
-    // For the sake of storing video in database
-    const editor_details = await User.findOne({ _id: req.body.editor });
-    const editor_email = editor_details.email;
+//     // For the sake of storing video in database
+//     const editor_details = await User.findOne({ _id: req.body.editor });
+//     const editor_email = editor_details.email;
 
-    const video = new Video({
-      youtuber: req.body.youtuber,
-      editor: editor_email,
-      editor_name: editor_details.name,
-      video: uniqueFileName,
-      link: downloadLinks.webViewLink,
-      title: req.body.title,
-      description: req.body.description,
-    });
-    await video.save();
+//     const video = new Video({
+//       youtuber: req.body.youtuber,
+//       editor: editor_email,
+//       editor_name: editor_details.name,
+//       video: uniqueFileName,
+//       link: downloadLinks.webViewLink,
+//       title: req.body.title,
+//       description: req.body.description,
+//     });
+//     await video.save();
 
-    // Add a notification to Youberzz
-    const notification = new Notification({
-      video: uniqueFileName,
-      youtuber: req.body.youtuber,
-      editor: editor_email,
-      editor_name: editor_details.name
-    });
-    await notification.save();
-    //----------------------------------------------------
-    fs.unlinkSync(req.file.path); // Delete the file from server after upload
-    res.status(200).json({ fileId: fileId, downloadLinks: downloadLinks });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+//     // Add a notification to Youberzz
+//     const notification = new Notification({
+//       video: uniqueFileName,
+//       youtuber: req.body.youtuber,
+//       editor: editor_email,
+//       editor_name: editor_details.name
+//     });
+//     await notification.save();
+//     //----------------------------------------------------
+//     fs.unlinkSync(req.file.path); // Delete the file from server after upload
+//     res.status(200).json({ fileId: fileId, downloadLinks: downloadLinks });
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// });
 app.post('/signup', async (req, res) => {
   const { name, email, password, role } = req.body;
   const user = await User.findOne({ email: email });
