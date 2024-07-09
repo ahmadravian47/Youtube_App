@@ -12,9 +12,9 @@
       "dest": "/index.js"
     }
   ],
-  "functions": {
-    "api/**/*.js": {
+  "functions": [
+     {
       "maxDuration": 10
     }
-  }
+  ]
 }
