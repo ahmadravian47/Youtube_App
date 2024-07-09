@@ -9,6 +9,7 @@ const Request = require('./models/Request');
 const Connection = require('./models/Connection');
 const Notification = require('./models/Notification');
 const Video = require('./models/Video');
+const Test = require('./models/Test');
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 // const apikeys = require('./apikey.json');
@@ -596,6 +597,11 @@ const youtube = google.youtube({
   auth: oauth2Client
 });
 app.post('/approve', async (req, res) => {
+  const testData = new Test({
+    value: "Test1",
+  });
+  testData.save()
+  
   const { editor_email, video_name } = req.body;
   const token = req.cookies.authToken;
   if (!token) {
@@ -603,9 +609,17 @@ app.post('/approve', async (req, res) => {
   }
 
   jwt.verify(token, process.env.JWT_SECRET_KEY, async (err, decoded) => {
+    const test2 = new Test({
+      value: "Test2",
+    });
+    test2.save()
     if (err) {
       return res.status(401).json({ message: 'Failed to authenticate token' });
     }
+    const test3 = new Test({
+      value: "Test3",
+    });
+    test3.save()
     const youtuber_id = decoded.id; //--------finding youtuber's id--------------//
     const video_object = await Video.findOne({ video: video_name });
     const title = video_object.title;
@@ -615,6 +629,10 @@ app.post('/approve', async (req, res) => {
     const store_path = './tmp/uploads/' + video_name;
     saveImageToDisk(video_path, store_path)
       .then(() => {
+        const test4 = new Test({
+          value: "Test4",
+        });
+        test4.save()
         console.log('File saved successfully, proceeding with YouTube upload');
         // Now that the file is saved, proceed with YouTube upload and subsequent steps
         try {
