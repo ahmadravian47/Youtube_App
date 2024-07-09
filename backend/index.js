@@ -514,16 +514,15 @@ app.post('/deletenotification',async(req,res)=>{
 
 })
 app.get('/hell',async (req, res) => {
-//   const users=await User.find().toArray();
-//  res.send(users);
-mongoose
-  .connect('mongodb+srv://ahmad47:ravian69@cluster0.ugpszuc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
-  .then(() => {
-    res.send(`<h1>Connected to mongodb:cluster1/CarsMernDB</h1>`);
-  })
-  .catch((error) => {
-    res.send(`<h1>Not Connected to mongodb:cluster1/CarsMernDB</h1>`);
-  });
+  res.send('<h1>Form submitted successfully! Response may take 1-2 business days.</h1>');
+// mongoose
+//   .connect('mongodb+srv://ahmad47:ravian69@cluster0.ugpszuc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
+//   .then(() => {
+//     res.send(`<h1>Connected`);
+//   })
+//   .catch((error) => {
+//     res.send(`<h1>Not Connected</h1>`);
+//   });
 });
 
 const PORT = process.env.PORT || 3000;
