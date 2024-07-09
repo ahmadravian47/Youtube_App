@@ -32,7 +32,14 @@ mongoose
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(cors({ credentials: true, origin: "http://localhost:5173/" }));
+app.use(cors(
+  {
+    origin: ["http://localhost:5173"],
+    methods: ["POST", "GET"],
+    credentials: true
+  }
+));
+
 app.use(cookieParser());
 
 // const upload = multer({ dest: 'uploads/' });
