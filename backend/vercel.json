@@ -13,7 +13,7 @@
     }
   ],
   "functions": {
-    "/hell": {
+    "index.js": {
       "maxDuration": 10 
     }
   }
