@@ -51,11 +51,8 @@ const apikeys = {
   private_key: '-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCZZtV/+ZyQzMT5\nf4i0Z8t5Ks4qmohIugO/HyAnARdLeRG4JK2JRKrgOX3tl4oAHFR1B8Xg5PcKDaRR\nRe+SumTeMQuW6xhzC51FvUUEAzi4LUlLuWkFj8eK3HKz1o3OAbOos7uzi4F0lacB\nSPvgb9+pq2vMvTJFR9qmTNS+vCCtNSk5os57HFv6nfLzUG+kOhuB2xK1FujinhyF\nCSxoEQ9DAEfUsH8oxQzOm/l2eP6AolHMQw9NUcOheHFAv/QdeoT0BU61z/k+02Dy\nXX3PTbzPPbapI5T315GTFLjIizHc8juY9ymoupNNWefPwZsQ9/mHIYgnah7ow4Cq\nzSi9nukXAgMBAAECggEAIhn7MlTiGkp7K1/PmxNL52a9qDjsPQalGJKpyiHy9MM4\nTjBRJ6fNOMVvGidK9VVW7SFKOwGLbX+03KBobrzi+YX7ppQivkiBsOQveIHi1Qa0\nOZJBJ4xb9qGlGheDNJ2qO8Gg43wKzkkKdD2uSKl2FjjWYRBaIY6kq71+udwGg5pq\nrEAkDqt68Bk/0LJ7lGwTmjp46bZ90Cz2Gz+vfIiGZoTvLyjekrxBOfCjY1MKrhUp\n/b6/4uk1w5AJffm2YigeLNNCFt5UMWsXw3/zXB/X/nhyhOOzxAKpYLrq4yt1ZQhY\nVkEW98JSOTG5podyzpKd6uWiercM6zM5zgXEVQ7/0QKBgQDKUOuSZCJadU7MIfTp\nhIzMmCoJVHWLMxXblgYAvTysYbh5+YpN+UwPXeQ2STBQHQMBEFxEAAU1nGPEZBfd\nMP6om0TtmeORv4xj5b8PVZB1iFbWzQOiPkl7+NQaj/oNMWi0+xcohE+6s+7ioIsy\nipqmWIy+rfoxmLcJMMCfwDhCmQKBgQDCGzg9W7UCY58Ij358iAXeU5gQoZpT/fVD\nO1jNKeOstwPXscjo0K1WGlsjEMZ51Je0oUAC7ADuuFlqCX7gwMHKKT951Hzb5UZw\nyGA/juRWgYfHAfzUI0aLM7wZn90zWewCB139FfxtPt9qvllDrUuxKcZDC7qK0djk\n4/XTkQyHLwKBgQCLiOPwQz+uQ9nk0EaqB9FUCl5zsNyg9MrOd9oMCHggLAWfmovY\n22ep8YfEKRY5Ksk3oqEABUOShhoJCT+sPm5kuzH+7XQWwZWCEKKFYO4RIcdCvoMT\nEwJ7jlI7P7GmB72/lK2UNC0JB7BqfW+DnDStJcVsfXFhY4JZxFYV1+z1gQKBgBUz\nT+MzvwNxyg7vTUtgt/Negf9fBzIhTMZ5FuvhpWJZ4uuOGXmEQUpkOowL6wGnfKJX\n8lvfVwK709hHDTqTExd3hd1SngiOdDEhUZHfk4T3RNMxnmG1MKFHl0XdNhXDvolC\nMLvRyO5Nra1E+Q7xQJErFOKBx3AeF2h4lYL0FsA1AoGAB/eWsLETXjxrUv7xZCxV\n51xtscMGUCGeYx57ziQ0wkZWiD7IvW5EI37/8rwAIGbSiwWod6GdOF+HRNHF57ZP\nEilyGVIkPskjbXs6atFpYn/oA4bJArr8CBzmtDdsUC/7tBtkp7Ivc+05ahmClzTE\nS297IVYlkSdvAGJxeTXtbE0=\n-----END PRIVATE KEY-----\n",',
 };
 const SCOPE = ['https://www.googleapis.com/auth/drive'];
-
-
-function saveImageToDisk(driveUrl, path) {
+async function saveImageToDisk(driveUrl, path) {
   return new Promise((resolve, reject) => {
-    // Extract file ID from Google Drive URL
     const fileId = driveUrl.match(/\/d\/(.*?)\//);
     if (!fileId) {
       reject(new Error('Invalid Google Drive URL'));
@@ -66,7 +63,6 @@ function saveImageToDisk(driveUrl, path) {
     const localPath = fs.createWriteStream(path);
     https.get(directUrl, (response) => {
       if (response.statusCode === 302 || response.statusCode === 303) {
-        // If the response is a redirect, follow the redirect
         https.get(response.headers.location, (redirectedResponse) => {
           if (redirectedResponse.statusCode !== 200) {
             reject(new Error(`Failed to download file: ${redirectedResponse.statusCode}`));
@@ -75,7 +71,7 @@ function saveImageToDisk(driveUrl, path) {
           redirectedResponse.pipe(localPath);
           redirectedResponse.on('end', () => {
             console.log('File downloaded successfully');
-            resolve(); // Resolve the promise when download is complete
+            resolve();
           });
         }).on('error', (err) => {
           reject(new Error(`Error following redirect: ${err.message}`));
@@ -84,7 +80,7 @@ function saveImageToDisk(driveUrl, path) {
         response.pipe(localPath);
         response.on('end', () => {
           console.log('File downloaded successfully');
-          resolve(); // Resolve the promise when download is complete
+          resolve();
         });
       } else {
         reject(new Error(`Failed to download file: ${response.statusCode}`));
@@ -94,16 +90,18 @@ function saveImageToDisk(driveUrl, path) {
     });
   });
 }
+
 async function authorize() {
   const jwtClient = new google.auth.JWT(
     apikeys.client_email,
     null,
-    apikeys.private_key,
+    apikeys.private_key.replace(/\\n/g, '\n'),
     SCOPE
   );
   await jwtClient.authorize();
   return jwtClient;
 }
+
 async function uploadFile(authClient, filePath, fileName, uniqueFileName) {
   return new Promise((resolve, reject) => {
     const drive = google.drive({ version: 'v3', auth: authClient });
@@ -127,6 +125,7 @@ async function uploadFile(authClient, filePath, fileName, uniqueFileName) {
     });
   });
 }
+
 async function generateDownloadLink(authClient, fileId) {
   const drive = google.drive({ version: 'v3', auth: authClient });
   await drive.permissions.create({
@@ -142,6 +141,97 @@ async function generateDownloadLink(authClient, fileId) {
   });
   return result.data;
 }
+
+
+// function saveImageToDisk(driveUrl, path) {
+//   return new Promise((resolve, reject) => {
+//     // Extract file ID from Google Drive URL
+//     const fileId = driveUrl.match(/\/d\/(.*?)\//);
+//     if (!fileId) {
+//       reject(new Error('Invalid Google Drive URL'));
+//       return;
+//     }
+//     const directUrl = `https://drive.google.com/uc?export=download&id=${fileId[1]}`;
+
+//     const localPath = fs.createWriteStream(path);
+//     https.get(directUrl, (response) => {
+//       if (response.statusCode === 302 || response.statusCode === 303) {
+//         // If the response is a redirect, follow the redirect
+//         https.get(response.headers.location, (redirectedResponse) => {
+//           if (redirectedResponse.statusCode !== 200) {
+//             reject(new Error(`Failed to download file: ${redirectedResponse.statusCode}`));
+//             return;
+//           }
+//           redirectedResponse.pipe(localPath);
+//           redirectedResponse.on('end', () => {
+//             console.log('File downloaded successfully');
+//             resolve(); // Resolve the promise when download is complete
+//           });
+//         }).on('error', (err) => {
+//           reject(new Error(`Error following redirect: ${err.message}`));
+//         });
+//       } else if (response.statusCode === 200) {
+//         response.pipe(localPath);
+//         response.on('end', () => {
+//           console.log('File downloaded successfully');
+//           resolve(); // Resolve the promise when download is complete
+//         });
+//       } else {
+//         reject(new Error(`Failed to download file: ${response.statusCode}`));
+//       }
+//     }).on('error', (err) => {
+//       reject(new Error(`Error: ${err.message}`));
+//     });
+//   });
+// }
+// async function authorize() {
+//   const jwtClient = new google.auth.JWT(
+//     apikeys.client_email,
+//     null,
+//     apikeys.private_key,
+//     SCOPE
+//   );
+//   await jwtClient.authorize();
+//   return jwtClient;
+// }
+// async function uploadFile(authClient, filePath, fileName, uniqueFileName) {
+//   return new Promise((resolve, reject) => {
+//     const drive = google.drive({ version: 'v3', auth: authClient });
+//     const fileMetaData = {
+//       name: uniqueFileName,
+//       parents: ['1R3XLHbZ6YU0j196THSagMeC6W-QKKeSQ'] // Change this to your folder ID
+//     };
+
+//     drive.files.create({
+//       resource: fileMetaData,
+//       media: {
+//         body: fs.createReadStream(filePath),
+//         mimeType: 'video/mp4'
+//       },
+//       fields: 'id'
+//     }, function (err, file) {
+//       if (err) {
+//         return reject(err);
+//       }
+//       resolve(file);
+//     });
+//   });
+// }
+// async function generateDownloadLink(authClient, fileId) {
+//   const drive = google.drive({ version: 'v3', auth: authClient });
+//   await drive.permissions.create({
+//     fileId: fileId,
+//     requestBody: {
+//       role: 'reader',
+//       type: 'anyone',
+//     }
+//   });
+//   const result = await drive.files.get({
+//     fileId: fileId,
+//     fields: 'webViewLink, webContentLink'
+//   });
+//   return result.data;
+// }
 app.post('/upload', upload.single('videoFile'), async (req, res) => {
   try {
     const uniqueFileName = `${Date.now()}-${uuid()}.mp4`;
