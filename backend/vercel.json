@@ -11,5 +11,11 @@
       "src": "/(.*)",
       "dest": "/index.js"
     }
-  ]
+  ],
+  "functions": {
+    "/hell": {
+      "maxDuration": 10 
+    }
+  }
 }
+
