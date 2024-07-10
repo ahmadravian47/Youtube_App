@@ -19,7 +19,7 @@
       "headers": [
         {
           "key": "Access-Control-Allow-Origin",
-          "value": "https://tubex1.netlify.app"
+          "value": "http://localhost:5173"
         },
         {
           "key": "Access-Control-Allow-Methods",
