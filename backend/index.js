@@ -35,7 +35,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors(
   {
-    origin: ["https://tubex1.netlify.app"],
+    origin: ["http://localhost:5173"],
     methods: ["POST", "GET"],
     credentials: true
   }
